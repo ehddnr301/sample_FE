@@ -1,7 +1,14 @@
 import axios from "axios";
 import React, { useCallback, useState } from "react";
-import { mlopsAPI } from "../../api";
 import HomePresenter from "./HomePresenter";
+
+
+const changeTemp = (r, t) => {
+  const result = document.getElementById(r);
+  const temp = document.getElementById(t);
+
+  temp.innerText = result.value;
+};
 
 const useInput = (defaultValue) => {
   const [value, setValue] = useState(defaultValue);
@@ -15,6 +22,7 @@ const useInput = (defaultValue) => {
 
   return { value, onChange, setValue };
 };
+
 
 const useSelect = (defaultValue) => {
   const [value, setValue] = useState(defaultValue);
@@ -31,6 +39,7 @@ const useSelect = (defaultValue) => {
 
 const HomeContainer = () => {
   const [result, setResult] = useState(null);
+  const [result2, setResult2] = useState(null);
   const [task, setTask] = useState(true);
   const age = useInput(0);
   const bmi = useInput(0);
@@ -39,21 +48,60 @@ const HomeContainer = () => {
   const smoker = useSelect("no");
   const region = useSelect("southeast");
 
-  const getData = useCallback(async () => {
-    const res = await axios.put(
+  const [inputs, setInputs] = useState({});
+
+
+  const generateRandomNumber = (num, cnt=10) => {
+    const min = num-1;
+    const max = num+1;
+    let res= []
+    for(let i=0; i < cnt; i++){
+      res.push(Math.random() * (max - min) + min);
+    }
+
+    return res
+  };
+
+  const getInsurance = useCallback(async (params) => {
+    const {age, sex, bmi, children, smoker, region} = params;
+    console.log(age, sex, bmi, children, smoker, region)
+    console.log(params)
+    const {data : { result }} = await axios.put(
       "http://127.0.0.1:8000/predict/insurance?model_name=keep_update_model",
       {
-        age: 0,
-        sex: 0,
-        bmi: 0.0,
-        children: 0,
-        smoker: 0,
-        region: 0,
+        age: age,
+        sex: sex,
+        bmi: parseFloat(bmi),
+        children: children,
+        smoker: parseInt(smoker),
+        region: parseInt(region),
       }
     );
-    console.log(res);
-    setResult(res);
+    console.log(result);
+    setResult(result);
   });
+
+  const getTemperature = useCallback(async (params) => {
+    const tempArr = Object.values(params)
+    const a = generateRandomNumber(parseFloat(tempArr[0]))
+    let result = []
+    tempArr.forEach((temp,idx) => {
+      if(idx == 6){
+        result.push(...generateRandomNumber(parseFloat(temp),12))
+      }else{
+        result.push(...generateRandomNumber(parseFloat(temp)))
+      }
+    })
+    const {data} = await axios.put(
+      "http://127.0.0.1:8000/predict/atmos",
+      result
+    );
+
+    console.log(data)
+    setResult2(data)
+
+
+  })
 
   const toggleTask = useCallback(() => {
     setTask((task) => !task);
@@ -61,7 +109,9 @@ const HomeContainer = () => {
 
   return (
     <HomePresenter
-      getData={getData}
+      getInsurance={getInsurance}
+      getTemperature={getTemperature}
+      changeTemp={changeTemp}
       age={age}
       bmi={bmi}
       children={children}
@@ -69,8 +119,11 @@ const HomeContainer = () => {
       smoker={smoker}
       region={region}
       result={result}
+      result2={result2}
       task={task}
       toggleTask={toggleTask}
+      inputs={inputs}
+      setInputs={setInputs}
     />
   );
 };

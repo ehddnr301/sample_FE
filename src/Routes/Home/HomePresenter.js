@@ -1,12 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import Plot from 'react-plotly.js';
 
-const changeTemp = (r, t) => {
-  const result = document.getElementById(r);
-  const temp = document.getElementById(t);
-
-  temp.innerText = result.value;
-};
 
 const Container = styled.div`
   display: flex;
@@ -54,14 +49,21 @@ const Btn = styled.button`
     border: 1px solid black;
   }
 `;
-const Result = styled.div``;
+const Result = styled.div`
+  margin-top:20px;
+  font-size:18px;
+  color:white;
+  font-weight:600;
+`;
 
 const Temp = styled.div`
   margin-bottom: 5px;
 `;
 
 const HomePresenter = ({
-  getData,
+  getInsurance,
+  getTemperature,
+  changeTemp,
   age,
   bmi,
   children,
@@ -69,9 +71,14 @@ const HomePresenter = ({
   smoker,
   region,
   result,
+  result2,
   task,
   toggleTask,
+  inputs,
+  setInputs
 }) => {
+  console.log(result2)
+
   return task ? (
     <Container>
       <H2 onClick={toggleTask}>Predict Insurance</H2>
@@ -91,29 +98,36 @@ const HomePresenter = ({
         <Box>
           <H3>성별을 선택해주세요.</H3>
           <Select {...sex}>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <option value={0}>Male</option>
+            <option value={1}>Female</option>
           </Select>
         </Box>
         <Box>
           <H3>흡연여부를 선택해주세요.</H3>
           <Select {...smoker}>
-            <option value="no">No</option>
-            <option value="yes">Yes</option>
+            <option value={0}>No</option>
+            <option value={1}>Yes</option>
           </Select>
         </Box>
         <Box>
           <H3>거주지역을 선택해주세요.</H3>
           <Select {...region}>
-            <option value="southeast">Southeast</option>
-            <option value="southwest">Southwest</option>
-            <option value="northwest">Northwest</option>
-            <option value="northeast">Northeast</option>
+            <option value={0}>Southeast</option>
+            <option value={1}>Southwest</option>
+            <option value={2}>Northwest</option>
+            <option value={3}>Northeast</option>
           </Select>
         </Box>
-        <Btn onClick={getData}>Make Prediction</Btn>
+        <Btn onClick={() => getInsurance({
+          age:age.value,
+          bmi:bmi.value,
+          children:children.value,
+          sex:sex.value,
+          smoker:smoker.value,
+          region:region.value
+        })}>Make Prediction</Btn>
       </Wrapper>
-      {result ? <Result>1</Result> : <Result>2</Result>}
+      {result ? <Result>{`Prediction Insurance : ${result}`}</Result> : <Result></Result>}
     </Container>
   ) : (
     <Container>
@@ -133,13 +147,36 @@ const HomePresenter = ({
                 min={-10}
                 max={40}
                 step={0.1}
-                onChange={() => changeTemp(`r${i}`, `t${i}`)}
+                key={i}
+                onChange={({target}) => {
+                  setInputs(state => ({...state, [`temp${i}`]:target.value}))
+                  changeTemp(`r${i}`, `t${i}`)
+                  console.log(inputs)
+                }
+                }
               ></Input>
               <div id={`t${i}`}></div>
             </Box>
           );
         })}
+        <Btn onClick={() => getTemperature(inputs)}>Make Prediction</Btn>
       </Wrapper>
+      {result2 ? <Plot
+        data={[
+          {
+            x : [...Array(25).keys()],
+            y : result2[0],
+            type: 'scatter'
+          }
+        ]}
+        layout={ {
+          width: 720,
+          height: 480,
+          title: 'Temperature Plot',
+          plot_bgcolor:"23b499",
+          paper_bgcolor:"#23b499"
+        } }
+      /> : <Result></Result>}
     </Container>
   );
 };
