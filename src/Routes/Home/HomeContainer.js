@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useCallback, useState } from "react";
 import HomePresenter from "./HomePresenter";
 
-
 const changeTemp = (r, t) => {
   const result = document.getElementById(r);
   const temp = document.getElementById(t);
@@ -44,9 +43,9 @@ const HomeContainer = () => {
   const age = useInput(0);
   const bmi = useInput(0);
   const children = useInput(0);
-  const sex = useSelect("male");
-  const smoker = useSelect("no");
-  const region = useSelect("southeast");
+  const sex = useSelect(0);
+  const smoker = useSelect(0);
+  const region = useSelect(0);
 
   const [inputs, setInputs] = useState({});
 
@@ -67,7 +66,7 @@ const HomeContainer = () => {
     console.log(age, sex, bmi, children, smoker, region)
     console.log(params)
     const {data : { result }} = await axios.put(
-      "http://127.0.0.1:8000/predict/insurance?model_name=keep_update_model",
+      "hl8469.iptime.org:11674/predict/insurance?model_name=keep_update_model",
       {
         age: age,
         sex: sex,
@@ -75,7 +74,7 @@ const HomeContainer = () => {
         children: children,
         smoker: parseInt(smoker),
         region: parseInt(region),
-      }
+      },
     );
     console.log(result);
     setResult(result);
@@ -93,8 +92,8 @@ const HomeContainer = () => {
       }
     })
     const {data} = await axios.put(
-      "http://127.0.0.1:8000/predict/atmos",
-      result
+      "hl8469.iptime.org:11674/predict/atmos",
+      result,
     );
 
     console.log(data)
