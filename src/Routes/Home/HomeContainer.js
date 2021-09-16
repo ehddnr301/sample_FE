@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useCallback, useState } from "react";
 import HomePresenter from "./HomePresenter";
 
+
 const changeTemp = (r, t) => {
   const result = document.getElementById(r);
   const temp = document.getElementById(t);
@@ -64,9 +65,8 @@ const HomeContainer = () => {
   const getInsurance = useCallback(async (params) => {
     const {age, sex, bmi, children, smoker, region} = params;
     console.log(age, sex, bmi, children, smoker, region)
-    console.log(params)
     const {data : { result }} = await axios.put(
-      "hl8469.iptime.org:11674/predict/insurance?model_name=keep_update_model",
+      "http://hl8469.iptime.org:11674/predict/insurance?model_name=keep_update_model",
       {
         age: age,
         sex: sex,
@@ -92,7 +92,7 @@ const HomeContainer = () => {
       }
     })
     const {data} = await axios.put(
-      "hl8469.iptime.org:11674/predict/atmos",
+      "http://hl8469.iptime.org:11674/predict/atmos",
       result,
     );
 
