@@ -66,7 +66,7 @@ const HomeContainer = () => {
     const {age, sex, bmi, children, smoker, region} = params;
     console.log(age, sex, bmi, children, smoker, region)
     const {data : { result }} = await axios.put(
-      "https://28e1-123-111-222-166.ngrok.io/predict/insurance?model_name=keep_update_model",
+      "https://main.hl8469.shop:11674/predict/insurance?model_name=keep_update_model",
       {
         age: age,
         sex: sex,
@@ -92,7 +92,7 @@ const HomeContainer = () => {
       }
     })
     const {data} = await axios.put(
-      "https://28e1-123-111-222-166.ngrok.io/predict/atmos",
+      "https://main.hl8469.shop:11674/predict/atmos",
       result,
     );
 
