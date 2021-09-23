@@ -92,7 +92,7 @@ const HomeContainer = () => {
       }
     })
     const {data} = await axios.put(
-      "https://28e1-123-111-222-166.ngrok.iopredict/atmos",
+      "https://28e1-123-111-222-166.ngrok.io/predict/atmos",
       result,
     );
 
