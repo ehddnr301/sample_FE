@@ -41,6 +41,7 @@ const HomeContainer = () => {
   const [result, setResult] = useState(null);
   const [result2, setResult2] = useState(null);
   const [task, setTask] = useState(true);
+  const model_name = useInput();
   const age = useInput(0);
   const bmi = useInput(0);
   const children = useInput(0);
@@ -62,7 +63,7 @@ const HomeContainer = () => {
     return res
   };
 
-  const getInsurance = useCallback(async (params) => {
+  const getInsurance = useCallback(async (params, model_name) => {
     const {age, sex, bmi, children, smoker, region} = params;
     console.log(age, sex, bmi, children, smoker, region)
     const {data : { result }} = await axios.put(
@@ -111,6 +112,7 @@ const HomeContainer = () => {
       getInsurance={getInsurance}
       getTemperature={getTemperature}
       changeTemp={changeTemp}
+      model_name={model_name}
       age={age}
       bmi={bmi}
       children={children}

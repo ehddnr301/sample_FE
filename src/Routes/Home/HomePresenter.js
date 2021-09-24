@@ -64,6 +64,7 @@ const HomePresenter = ({
   getInsurance,
   getTemperature,
   changeTemp,
+  model_name,
   age,
   bmi,
   children,
@@ -83,6 +84,10 @@ const HomePresenter = ({
     <Container>
       <H2 onClick={toggleTask}>Predict Insurance</H2>
       <Wrapper>
+        <Box>
+          <H3>사용하시려는 Model Name을 입력해주세요</H3>
+          <Input placeholder={"insurance_fee_model"} {...model_name} />
+        </Box>
         <Box>
           <H3>Age를 입력해주세요.</H3>
           <Input placeholder={"Age"} {...age} />
@@ -125,7 +130,7 @@ const HomePresenter = ({
           sex:sex.value,
           smoker:smoker.value,
           region:region.value
-        })}>Make Prediction</Btn>
+        }, model_name.value)}>Make Prediction</Btn>
       </Wrapper>
       {result ? <Result>{`Prediction Insurance : ${result}`}</Result> : <Result></Result>}
     </Container>
