@@ -67,7 +67,7 @@ const HomeContainer = () => {
     const {age, sex, bmi, children, smoker, region} = params;
     console.log(age, sex, bmi, children, smoker, region)
     const {data : { result }} = await axios.put(
-      `https://main.hl8469.shop:11674/predict/insurance?${model_name}=insurance_fee_model`,
+      `https://main.hl8469.shop:11674/predict/insurance?model_name=${model_name}`,
       {
         age: age,
         sex: sex,
