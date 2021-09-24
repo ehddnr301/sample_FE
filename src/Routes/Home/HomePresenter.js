@@ -86,7 +86,7 @@ const HomePresenter = ({
       <Wrapper>
         <Box>
           <H3>사용하시려는 Model Name을 입력해주세요</H3>
-          <Input placeholder={"insurance_fee_model"} {...model_name} />
+          <Input placeholder={"insurance"} {...model_name} />
         </Box>
         <Box>
           <H3>Age를 입력해주세요.</H3>
