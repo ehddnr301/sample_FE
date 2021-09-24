@@ -41,7 +41,7 @@ const HomeContainer = () => {
   const [result, setResult] = useState(null);
   const [result2, setResult2] = useState(null);
   const [task, setTask] = useState(true);
-  const model_name = useInput();
+  const model_name = useInput(null);
   const age = useInput(0);
   const bmi = useInput(0);
   const children = useInput(0);
